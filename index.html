@@ -94,8 +94,11 @@
 label="Select Warc File" url="/cgi-bin/eventModel/generateEventModel.py"
 uploadOnSelect="true" id="uploader" name="uploader"/>
 		-->
-		<form method="post" action="/cgi-bin/eventModel/upload.py" id="myForm" enctype="multipart/form-data" >
-   			<input name="uploadedFile" multiple="false" type="file" data-dojo-type="dojox.form.Uploader" label="Select Warc File" id="uploader" />
+		<h4> Upload event collection (URLs or WARC file)</h4>
+		<form method="post" action="/cgi-bin/eventModel/upload.py" enctype="multipart/form-data" id="uploadForm" data-dojo-type="dijit/form/Form" data-dojo-id="uploadForm">
+			<input type="radio" data-dojo-type="dijit/form/RadioButton" name="fileType" id="urlsRadio" value="urls"/> <label for="urlsRadio">URLs</label> 
+			<input type="radio" data-dojo-type="dijit/form/RadioButton" name="fileType" id="warcRadio" value="warc"/> <label for="warcRadio">WARC</label> <br />
+   			<input name="uploadedFile" multiple="false" type="file" data-dojo-type="dojox.form.Uploader" label="Select File" id="uploader" />
    			<input type="submit" label="Submit" data-dojo-type="dijit.form.Button" />
    			<div id="files" dojoType="dojox.form.uploader.FileList"
 			uploaderId="uploader"></div>
@@ -116,11 +119,13 @@ uploadOnSelect="true" id="uploader" name="uploader"/>
         	"dojo/parser",
             'dojo/dom',
             "dojo/on", "dojo/request",
+            "dijit/form/Form",
             "dijit/form/SimpleTextarea",
             'dojo/dom-construct',
             "dijit/layout/BorderContainer",
 			"dijit/layout/TabContainer",
 			"dijit/layout/ContentPane",
+			"dijit/form/RadioButton",
 			"dojox/form/Uploader",
 			//"dojox/form/uploader/plugins/IFrame",
 			"dojox/form/uploader/FileList",
@@ -130,10 +135,16 @@ uploadOnSelect="true" id="uploader" name="uploader"/>
         	parser.parse();
           
           upl = dijit.byId("uploader");
+          
           dojo.connect(upl, "onComplete", function(dataArray){
           					console.log(dataArray);
+          					uf = dijit.byId("uploadForm");
+						  	vals = uf.get('value');
+		  					inType = vals['fileType'];
+          					console.log(inType);
 							//alert("upload complete");
-							analyzeContent(dataArray.file,"warc");
+							//analyzeContent(dataArray.file,"warc");
+							analyzeContent(dataArray.file,inType);
 						});
           
           /*
