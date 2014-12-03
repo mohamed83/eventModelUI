@@ -1,0 +1,22 @@
+html,body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+#mainDiv{
+height: 600px;
+}
+#leftCol {
+    width: 40px;
+}
+ 
+.claro .demoLayout .edgePanel {
+    background-color: #d0e9fc;
+}
+* {
+    outline: none !important;
+}
+
+h1 {
+	font-size:1.5em;
+}

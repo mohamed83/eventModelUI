@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.1/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen">
+    <title>Event Model Demo</title>
+   
+</head>
+<body class="claro">
+   <div id="mainDiv" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design: 'headline'">
+		<div class="centerPanel" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region: 'center'">
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Frequent Words'">
+				<h4>
+					Top frequent words in the corpus 
+				</h4>
+				
+				<div id="freqWordsResultsDiv">
+				</div>
+				
+			</div>
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Indicative Words'">
+				<h4>
+					Top Indicative words in the corpus 
+				</h4>
+				
+				<div id="indicativeWordsResultsDiv">
+				</div>
+				
+			</div>
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Important Sentences'">
+				<h4>
+					Important sentences in the corpus
+				</h4>
+				<div id="imptSentsResultsDiv">
+				<ul id='impSentsList'>
+				</ul>
+				</div>
+			</div>
+			<!--
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Event Model'">
+				<h4>
+					Event model instances
+				</h4>
+			</div>
+			-->
+		</div>
+		<div class="edgePanel" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'top'">
+			<h1 id="mainHeading">
+				Demo: Event Models
+			</h1>
+		</div>
+		<div id="leftCol" class="edgePanel" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'left', splitter: true">
+			 <h4>Sample URLs</h4> 
+			<p>Enter Sample URLs here, one URL per line
+			</p>
+			
+			<textarea id="urls" rows='30' cols='40' data-dojo-type="dijit/form/SimpleTextarea" style='text-align:left'></textarea>
+			<p><button id="analyzeBttn"> Analyze Corpus </button> </p>
+		</div>
+	</div>
+	
+	
+	 <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.1/dojo/dojo.js"
+            data-dojo-config="async: true"></script>
+    <script>
+        require([
+        	"dojo/parser",
+            'dojo/dom',
+            "dojo/on", "dojo/request",
+            "dijit/form/SimpleTextarea",
+            'dojo/dom-construct',
+            "dijit/layout/BorderContainer",
+			"dijit/layout/TabContainer",
+			"dijit/layout/ContentPane",
+			 
+            'dojo/domReady!'
+        ], function (parser,dom,on,request, domConstruct,BorderContainer,TabContainer,ContentPane) {
+        	parser.parse();
+        	var btn = dom.byId('analyzeBttn');
+        	on(btn,'click',function(){
+        	//console.log(dom.byId('urls').value);
+            request.post("/cgi-bin/eventModel/generateEventModel.py", {
+ 				data:  {
+					urls: dom.byId('urls').value
+				},
+            }).then(function(response){
+            	pts = response.split('<br>============<br>');
+            	console.log(pts);
+            	dom.byId('freqWordsResultsDiv').innerHTML = pts[0];
+                dom.byId('indicativeWordsResultsDiv').innerHTML = pts[1];
+                //dom.byId('imptSentsResultsDiv').innerHTML = pts[2];
+                //sentsList = pts[2].split('<br>');
+                
+                dom.byId('impSentsList').innerHTML = pts[2];
+                
+                //dom.byId('imptSentsResultsDiv').innerHTML = response;
+                
+            },
+                function(error){
+                    // Display the error returned
+                    dom.byId('imptSentsResultsDiv').innerHTML = "<div>"+error+"</div>";
+                    console.log(error);
+                });
+          });
+        });
+    </script>
+</body>
+</html>
