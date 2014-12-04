@@ -71,43 +71,27 @@
 			</h1>
 		</div>
 		
-		<div id="leftCol" class="edgePanel" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'left', splitter: true">
-		<!--
-			 <h4>Sample URLs</h4> 
-			<p>Enter Sample URLs here, one URL per line
-			</p>
+		<div data-dojo-type="dijit/layout/AccordionContainer" data-dojo-props="region:'leading', splitter: true">
+			<div data-dojo-type="dijit/layout/AccordionPane" title="Upload event collection (URLs or WARC file)">
+				<form method="post" action="/cgi-bin/eventModel/upload.py" enctype="multipart/form-data" id="uploadForm" data-dojo-type="dijit/form/Form" data-dojo-id="uploadForm">
+					<input type="radio" data-dojo-type="dijit/form/RadioButton" name="fileType" id="urlsRadio" value="urls"/> <label for="urlsRadio">URLs</label> 
+					<input type="radio" data-dojo-type="dijit/form/RadioButton" name="fileType" id="warcRadio" value="warc"/> <label for="warcRadio">WARC</label> <br />
+					<input name="uploadedFile" multiple="false" type="file" data-dojo-type="dojox.form.Uploader" label="Select File" id="uploader" />
+					<input type="submit" label="Submit" data-dojo-type="dijit.form.Button" />
+					<div id="files" dojoType="dojox.form.uploader.FileList"
+					uploaderId="uploader"></div>
+				</form>	
+			</div>
+			<div data-dojo-type="dijit/layout/AccordionPane" title="Select existing event collection">
+				<ul>
+					<li> <a id='BF' href="#">Burkina Faso unrest </a></li>
+					<li> <a id='Ebola' href="#">Ebola outbreak </a></li>
+					<li> <a id='Nig' href="#">Nigeria school bombing </a></li>
+					<li> <a id='NY' href="#">New York building collapse </a></li>
+				</ul>
 			
-			<textarea id="urls" rows='30' cols='40' data-dojo-type="dijit/form/SimpleTextarea" style='text-align:left'></textarea>
-			<p><button id="analyzeBttn"> Analyze Corpus </button> </p>
-		-->
-		<!--
-		<h4> Sample Events </h4>
-		
-		<ul>
-			<li> <a id='BF' href="#">Burkina Faso unrest </a></li>
-			<li> <a id='Ebola' href="#">Ebola outbreak </a></li>
-			<li> <a id='Nig' href="#">Nigeria school bombing </a></li>
-			<li> <a id='NY' href="#">New York building collapse </a></li>
-		</ul>-->
-		<!--
-		<input type="file" multiple="false" dojoType="dojox.form.Uploader"
-label="Select Warc File" url="/cgi-bin/eventModel/generateEventModel.py"
-uploadOnSelect="true" id="uploader" name="uploader"/>
-		-->
-		<h4> Upload event collection (URLs or WARC file)</h4>
-		<form method="post" action="/cgi-bin/eventModel/upload.py" enctype="multipart/form-data" id="uploadForm" data-dojo-type="dijit/form/Form" data-dojo-id="uploadForm">
-			<input type="radio" data-dojo-type="dijit/form/RadioButton" name="fileType" id="urlsRadio" value="urls"/> <label for="urlsRadio">URLs</label> 
-			<input type="radio" data-dojo-type="dijit/form/RadioButton" name="fileType" id="warcRadio" value="warc"/> <label for="warcRadio">WARC</label> <br />
-   			<input name="uploadedFile" multiple="false" type="file" data-dojo-type="dojox.form.Uploader" label="Select File" id="uploader" />
-   			<input type="submit" label="Submit" data-dojo-type="dijit.form.Button" />
-   			<div id="files" dojoType="dojox.form.uploader.FileList"
-			uploaderId="uploader"></div>
-		</form>
-		<div id='warcContent'>
-		</div>
-
-		
-		</div>
+			</div>
+    	</div>
 		
 	</div>
 	
@@ -147,7 +131,7 @@ uploadOnSelect="true" id="uploader" name="uploader"/>
 							analyzeContent(dataArray.file,inType);
 						});
           
-          /*
+          
           var a1 = dom.byId('BF');
           var a2 = dom.byId('Ebola');
           var a3 = dom.byId('Nig');
@@ -158,7 +142,7 @@ uploadOnSelect="true" id="uploader" name="uploader"/>
           on(a1,'click',showContent);
           on(a2,'click',showContent);
           on(a3,'click',showContent);
-          on(a4,'click',showContent);*/
+          on(a4,'click',showContent);
           
           function analyzeContent(text,intype){
           
@@ -192,9 +176,11 @@ uploadOnSelect="true" id="uploader" name="uploader"/>
           
           
           function showContent(evt){
-          dom.byId('wordsTable').innerHTML = "";
-          dom.byId('sentEntTable').innerHTML = "";
-          fileName = 'seedURLs' + evt.target.id + '.txt';
+			  dom.byId('wordsTable').innerHTML = "";
+			  dom.byId('sentEntTable').innerHTML = "";
+			  fileName = 'seedURLs' + evt.target.id + '.txt';
+			  analyzeContent(fileName,'urls')
+          /*
           request(fileName).then(
 				function(text){
 					console.log("The file's contents is: " + text);
@@ -204,6 +190,7 @@ uploadOnSelect="true" id="uploader" name="uploader"/>
 					console.log("An error occurred: " + error);
 				}
 			);
+			*/
           }
           
           
