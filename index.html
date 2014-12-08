@@ -21,6 +21,17 @@
 				
 			</div>
 			-->
+			
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Collection Statistics'">
+				<h4>
+					Collection URLs 
+				</h4>
+				
+				<div id="statsDiv">
+				
+				</div>
+				
+			</div>
 			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Indicative Words'">
 				<h4>
 					Top Indicative words in the corpus 
@@ -105,6 +116,7 @@
     <script>
         require([
         	"dojo/parser",
+        	"dojo/_base/array",
             'dojo/dom',
             "dojo/on", "dojo/request",
             "dijit/form/Form",
@@ -118,8 +130,9 @@
 			//"dojox/form/uploader/plugins/IFrame",
 			"dojox/form/uploader/FileList",
 			
+			
             'dojo/domReady!'
-        ], function (parser,dom,on,request, domConstruct,BorderContainer,TabContainer,ContentPane) {
+        ], function (parser,array,dom,on,request, domConstruct,BorderContainer,TabContainer,ContentPane) {
         	parser.parse();
           
           upl = dijit.byId("uploader");
@@ -162,6 +175,16 @@
             	dom.byId('wordsTable').innerHTML = pts[0];
             	dom.byId('sentEntTable').innerHTML = pts[1];
             	dom.byId('topicsResultsDiv').innerHTML = pts[2];
+            	urlsStr = pts[3];
+            	urlsList = urlsStr.split(",")
+            	urlsOut = "<ul>";
+            	array.forEach(urlsList, function(entry, i){
+					console.debug(entry, "at index", i);
+					urlsOut += "<li><a href='" +entry.trim() + "' target='_blank'> " + entry.trim()+"</a> </li>" ;
+				  });
+				  urlsOut += "</ul>";
+				  console.log(urlsOut);
+            	dom.byId('statsDiv').innerHTML = urlsOut;
             	//dom.byId('entities').innerHTML = pts[3];
             	
             	
