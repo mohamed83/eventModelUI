@@ -22,11 +22,11 @@
 			</div>
 			-->
 			
-			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Collection Statistics'">
-				<h4>
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title: 'Collection Content'">
+				<!--<h4>
 					Collection URLs 
-				</h4>
-				
+				</h4>-->
+				<div id="titleDiv"></div>
 				<div id="statsDiv">
 				
 				</div>
@@ -205,9 +205,12 @@
           
           
           function showContent(evt){
-			  dom.byId('wordsTable').innerHTML = "";
-			  dom.byId('sentEntTable').innerHTML = "";
+			  dom.byId('wordsTable').innerHTML = "Working .....";
+			  dom.byId('statsDiv').innerHTML = "Working .....";
+			  dom.byId('sentEntTable').innerHTML = "Working .....";
+			  dom.byId('topicsResultsDiv').innerHTML = "Working .....";
 			  fileName = 'seedURLs' + evt.target.id + '.txt';
+			  dom.byId('titleDiv').innerHTML = "<h3>"+evt.target.innerHTML+" Collection URLs</h3>";
 			  analyzeContent(fileName,'urls')
           /*
           request(fileName).then(
